@@ -1,3 +1,5 @@
+import eventcalendar.EventCalendar;
+
 import java.text.DateFormatSymbols;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -9,12 +11,9 @@ public class Main
 {
 	public static void main(String[] args) {
 
-		GregorianCalendar gc = new GregorianCalendar();
+		EventCalendar myCal = new EventCalendar();
 
-		Date foo = gc.getTime();
-		String month = monthName(gc.get(GregorianCalendar.MONTH));
-
-		System.out.println(month);
+		myCal.draw("month");
 	}
 
 	private static String monthName(int monthInt) {
