@@ -13,7 +13,8 @@ public class Main
 
 		EventCalendar myCal = new EventCalendar();
 
-		myCal.draw("month");
+		myCal.run();
+		//myCal.draw("month");
 	}
 
 	private static String monthName(int monthInt) {
