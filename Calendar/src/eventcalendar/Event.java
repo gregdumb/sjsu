@@ -1,5 +1,7 @@
 package eventcalendar;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -9,6 +11,8 @@ public class Event
 {
 	public Date date;
 	public String title;
+
+	private DateFormat eventDF = new SimpleDateFormat("MM/dd/yyyy k:mm");
 	
 	private String startTime;
 	
@@ -16,5 +20,15 @@ public class Event
 	{
 		date = d;
 		title = t;
+	}
+
+	public void draw()
+	{
+		String prettyDate = UI.eventDateFormat.format(date);
+
+		UI.output("\t");
+		UI.output(prettyDate);
+		UI.output("\t\t");
+		UI.outputln(title);
 	}
 }

@@ -10,6 +10,8 @@ import java.util.Scanner;
  */
 public class UI
 {
+	public static DateFormat eventDateFormat = new SimpleDateFormat("MM/dd/yyyy");
+
 	public static void outputln(String text) {
 		System.out.println(text);
 	}
@@ -49,7 +51,7 @@ public class UI
 		return s;
 	}
 	
-	public static String promptDate(String text)
+	public static String promptTime(String text)
 	{
 		String s = "";
 		boolean valid = false;
@@ -61,11 +63,31 @@ public class UI
 			
 			if(!valid)
 			{
+				outputln("Must be a 24h time in the format of 12:24");
+				//outputln("Must be a date in the format of mm/dd/yyyy");
+			}
+		}
+		
+		return s;
+	}
+
+	public static String promptDate(String text)
+	{
+		String s = "";
+		boolean valid = false;
+
+		while(!valid)
+		{
+			s = prompt(text);
+			valid = isValidDate(s);
+
+			if(!valid)
+			{
 				//outputln("Must be a 24h time in the format of 12:24");
 				outputln("Must be a date in the format of mm/dd/yyyy");
 			}
 		}
-		
+
 		return s;
 	}
 	
@@ -116,7 +138,7 @@ public class UI
 	
 	public static void pause()
 	{
-		output("Press any key to continue...");
+		output("Press Enter to continue...");
 		prompt("");
 	}
 	
@@ -133,6 +155,21 @@ public class UI
 		{
 		}
 		
+		return false;
+	}
+
+	public static boolean isValidDate(String d)
+	{
+		try
+		{
+			eventDateFormat.parse(d);
+			output("$$$ Date was valid");
+			return true;
+		}
+		catch ( ParseException exc )
+		{
+		}
+
 		return false;
 	}
 }

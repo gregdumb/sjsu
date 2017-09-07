@@ -1,5 +1,6 @@
 /**
- * Created by Greg on 9/5/2017.
+ * Homework #1: A calendar that you can store events on
+ * Copyright Gregory Brisebois 2017
  */
 
 package eventcalendar;
@@ -65,9 +66,11 @@ public class EventCalendar
 					break;
 					
 				case "g":
+					drawGotoMenu();
 					break;
 					
 				case "e":
+					drawListMenu();
 					break;
 					
 				case "d":
@@ -140,12 +143,45 @@ public class EventCalendar
 		UI.outputln("");
 		
 		String title = UI.promptString("Enter the title of the event: ");
-		
-		Event e = new Event(new Date(), title);
+
+		// @TODO Add support for date inputting
+		Event e = new Event(gc.getTime(), title);
 		
 		events.add(e);
 		
 		UI.outputln("Event added.");
+		UI.pause();
+	}
+
+	private void drawGotoMenu()
+	{
+		UI.outputln(DIVIDER);
+		String goDate = UI.promptDate("Enter a date (mm/dd/yyyy): ");
+
+		try
+		{
+			Date newDate = UI.eventDateFormat.parse(goDate);
+			gc.setTime(newDate);
+			UI.outputln("Date has been updated");
+		}
+		catch (ParseException e)
+		{
+			UI.output("Date parsing exception");
+		}
+	}
+
+	/** Lists all events */
+	private void drawListMenu()
+	{
+		UI.outputln(DIVIDER);
+		UI.outputln("All events");
+
+		if(events.isEmpty())
+			UI.outputln("You have no events scheduled.");
+		else
+			drawEvents();
+
+		UI.outputln("");
 		UI.pause();
 	}
 	
@@ -186,7 +222,11 @@ public class EventCalendar
 		String year = Integer.toString(gc.get(GregorianCalendar.YEAR));
 		
 		UI.outputln(weekday + ", " + month + " " + day + ", " + year);
-		UI.outputln("No events for this day.\n");
+		//UI.outputln("No events for this day.\n");
+
+		drawEvents(gc.getTime());
+
+		UI.outputln("");
 	}
 	
 	/** Render calendar */
@@ -282,5 +322,35 @@ public class EventCalendar
 	{
 		
 		return false;
+	}
+
+	/* Draws all events */
+	private void drawEvents()
+	{
+		drawEvents(null);
+	}
+
+	private void drawEvents(Date date)
+	{
+		String desiredDay = "";
+
+		if(date != null)
+			desiredDay = UI.eventDateFormat.format(date);
+
+		for(Event e : events)
+		{
+			if(date != null)
+			{
+				String eventDay = UI.eventDateFormat.format(e.date);
+				if(eventDay.equals(desiredDay))
+				{
+					e.draw();
+				}
+			}
+			else
+			{
+				e.draw();
+			}
+		}
 	}
 }
