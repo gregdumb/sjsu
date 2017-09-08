@@ -1,4 +1,5 @@
 import eventcalendar.EventCalendar;
+import eventcalendar.EventCalendarUI;
 
 import java.text.DateFormatSymbols;
 import java.util.Date;
@@ -10,9 +11,8 @@ import java.util.GregorianCalendar;
 public class Main
 {
 	public static void main(String[] args) {
-
-		EventCalendar myCal = new EventCalendar();
-
+		
+		EventCalendarUI myCal = new EventCalendarUI();
 		myCal.run();
 		//myCal.draw("month");
 	}

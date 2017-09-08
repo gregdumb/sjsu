@@ -3,6 +3,7 @@ package eventcalendar;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Scanner;
 
 /**
@@ -71,24 +72,28 @@ public class UI
 		return s;
 	}
 
-	public static String promptDate(String text)
+	public static Date promptDate(String text, DateFormat dateFormat)
 	{
+		Date returnDate = null;
 		String s = "";
 		boolean valid = false;
 
 		while(!valid)
 		{
 			s = prompt(text);
-			valid = isValidDate(s);
-
-			if(!valid)
+			
+			try
 			{
-				//outputln("Must be a 24h time in the format of 12:24");
-				outputln("Must be a date in the format of mm/dd/yyyy");
+				returnDate = dateFormat.parse(s);
+				valid = true;
+			}
+			catch ( ParseException exc )
+			{
+				outputln("Please enter a date in the format " + dateFormat.toString());
 			}
 		}
 
-		return s;
+		return returnDate;
 	}
 	
 	/** Prompts for input and checks for validity with given array of possible choices */

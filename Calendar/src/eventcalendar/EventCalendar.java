@@ -5,7 +5,7 @@
 
 package eventcalendar;
 
-import java.io.File;
+import java.io.*;
 import java.text.DateFormat;
 import java.text.DateFormatSymbols;
 import java.text.ParseException;
@@ -44,49 +44,76 @@ public class EventCalendar
 		events = new ArrayList<Event>();
 	}
 	
-	public void run()
+	/**********************************************
+	 * ACCESSORS
+	 */
+	
+	public GregorianCalendar getCal()
 	{
-		while(true)
+		return gc;
+	}
+	
+	public int get(int input)
+	{
+		return gc.get(input);
+	}
+	
+	public Date getTime()
+	{
+		return gc.getTime();
+	}
+	
+	public void setTime(Date newDate)
+	{
+		gc.setTime(newDate);
+	}
+	
+	public ArrayList<Event> getEvents()
+	{
+		return getEvents(null);
+	}
+	
+	/**
+	 * Get events from the calendar
+	 * @param date Date to look for events on
+	 * @return
+	 */
+	public ArrayList<Event> getEvents(Date date)
+	{
+		if(date != null)
 		{
-			String choice = drawMainMenu();
+			ArrayList<Event> returnEvents = new ArrayList<>();
+			DateFormat seekFormat = new SimpleDateFormat("MM/dd/yyyy");
+			String desiredDay = seekFormat.format(date);
 			
-			// MAIN MENU
-			switch (choice)
+			for(Event e : events)
 			{
-				case "l":
-					drawLoadMenu();
-					break;
-				
-				case "v":
-					drawViewMenu();
-					break;
-				
-				case "c":
-					drawCreateMenu();
-					break;
-					
-				case "g":
-					drawGotoMenu();
-					break;
-					
-				case "e":
-					drawListMenu();
-					break;
-					
-				case "d":
-					break;
-					
-				case "q":
-					UI.output("Thank you for using the Gregle Calendar");
-					System.exit(0);
-					break;
-				
-				default:
-					break;
+				String eventDay = seekFormat.format(e.date);
+				if(eventDay.equals(desiredDay))
+				{
+					returnEvents.add(e);
+				}
 			}
+			
+			return returnEvents;
+		}
+		else
+		{
+			return events;
 		}
 	}
 	
+	/**********************************************
+	 * MUTATORS
+	 */
+	
+	public boolean addEvent(Event e)
+	{
+		events.add(e);
+		
+		return true;
+	}
+	/*
 	private String drawMainMenu()
 	{
 		drawCalendar();
@@ -156,7 +183,7 @@ public class EventCalendar
 	private void drawGotoMenu()
 	{
 		UI.outputln(DIVIDER);
-		String goDate = UI.promptDate("Enter a date (mm/dd/yyyy): ");
+		String goDate = "";//UI.promptDate("Enter a date (mm/dd/yyyy): ");
 
 		try
 		{
@@ -170,7 +197,7 @@ public class EventCalendar
 		}
 	}
 
-	/** Lists all events */
+	/** Lists all events
 	private void drawListMenu()
 	{
 		UI.outputln(DIVIDER);
@@ -229,10 +256,10 @@ public class EventCalendar
 		UI.outputln("");
 	}
 	
-	/** Render calendar */
+	/** Render calendar
 	private void drawMonth()
 	{
-		String monthstr = getMonth();
+		String monthstr = "";//getMonth();
 		
 		UI.outputln(DIVIDER);
 		UI.outputln(monthstr);
@@ -256,9 +283,10 @@ public class EventCalendar
 		}
 		
 		UI.output("\n\n");
-	}
+	}*/
 
 	/** Returns formatted day of month with spaces */
+	/*
 	private String getDayOfMonth(int day)
 	{
 		String daystr = Integer.toString(day);
@@ -289,10 +317,10 @@ public class EventCalendar
 		}
 
 		return buffer;
-	}
+	}*/
 
 	/** Returns month string from our calendar */
-	private String getMonth()
+	public String getMonthStr()
 	{
 		return monthNameFromInt(rc.get(GregorianCalendar.MONTH));
 	}
@@ -318,10 +346,80 @@ public class EventCalendar
 	}
 	
 	/** Loads events from events.txt */
-	private boolean importEvents()
+	public boolean importEvents()
 	{
+		try
+		{
+			FileReader freader = new FileReader("src/eventcalendar/file.txt");
+			
+			BufferedReader breader = new BufferedReader(freader);
+			String line = "";
+			
+			while((line = breader.readLine()) != null) {
+				Event e = parseEventString(line);
+				events.add(e);
+			}
+			
+			freader.close();
+		}
+		catch (IOException e)
+		{
+			return false;
+		}
+		catch (ParseException e)
+		{
+			UI.outputln("FATAL ERROR PARSING FILE");
+			return false;
+		}
+		
+		return true;
+	}
+	
+	public boolean exportEvents()
+	{
+		try{
+			PrintWriter writer = new PrintWriter("src/eventcalendar/file.txt", "UTF-8");
+			
+			for(Event e : events)
+			{
+				writer.println(encodeEventString(e));
+			}
+			
+			writer.close();
+			return true;
+		}
+		catch (IOException e) {
+			UI.outputln("FATAL ERROR OUTPUTTING FILE");
+		}
 		
 		return false;
+	}
+	
+	private Event parseEventString(String s) throws ParseException
+	{
+		DateFormat df = EventCalendarUI.inputDateFormat;
+		DateFormat tf = EventCalendarUI.inputTimeFormat;
+		String[] elements = s.split("%%%");
+		
+		String title = elements[0];
+		Date date = df.parse(elements[1]);
+		Date startTime = tf.parse(elements[2]);
+		Date endTime =  tf.parse(elements[3]);
+		
+		return new Event(date, title, startTime, endTime);
+	}
+	
+	private String encodeEventString(Event e)
+	{
+		DateFormat df = EventCalendarUI.inputDateFormat;
+		DateFormat tf = EventCalendarUI.inputTimeFormat;
+		
+		String title = e.title;
+		String date = df.format(e.date);
+		String startTime = tf.format(e.startTime);
+		String endTime = tf.format(e.endTime);
+		
+		return title + "%%%" + date + "%%%" + startTime + "%%%" + endTime;
 	}
 
 	/* Draws all events */
