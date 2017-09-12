@@ -1,7 +1,4 @@
-package eventcalendar;
-
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -96,13 +93,14 @@ public class EventCalendarUI
 	// @TODO does nothing at the moment
 	private void drawLoadMenu()
 	{
-		//UI.outputln("Loading event list from '" + FILE_PATH + "'...");
-		boolean success = cal.importEvents(); //importEvents();
+		String filepath = UI.prompt("Enter your event file path: ");
+		
+		boolean success = cal.importEvents(filepath); //importEvents();
 		
 		if(success)
 			UI.outputln("Loaded events successfully.");
 		else
-			UI.outputln("Error loading events.");
+			UI.outputln("Error loading " + filepath);
 		
 		UI.pause();
 	}
@@ -142,8 +140,24 @@ public class EventCalendarUI
 		String title = UI.promptString("Enter the title of the event: ");
 		Date date = UI.promptDate("Enter the date of the event (mm/dd/yyy): ", inputDateFormat);
 		Date startTime = UI.promptDate("Enter the start time of the event (24:59): ", inputTimeFormat);
-		UI.outputln("Enter the end time of the event");
-		Date endTime = UI.promptDate("(enter same time as start for no end time): ", inputTimeFormat);
+		Date endTime = null;
+		
+		boolean valid = false;
+		
+		while(!valid)
+		{
+			UI.outputln("Enter the end time of the event");
+			endTime = UI.promptDate("(enter same time as start for no end time): ", inputTimeFormat);
+			
+			if(!endTime.before(startTime)) // Is not before, i.e. >=
+			{
+				valid = true;
+			}
+			else
+			{
+				UI.outputln("The end time must be after (or the same as) the start time.");
+			}
+		}
 		
 		Event e = new Event(date, title, startTime, endTime);
 		

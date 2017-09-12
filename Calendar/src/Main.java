@@ -1,9 +1,5 @@
-import eventcalendar.EventCalendar;
-import eventcalendar.EventCalendarUI;
 
 import java.text.DateFormatSymbols;
-import java.util.Date;
-import java.util.GregorianCalendar;
 
 /**
  * Created by Greg on 9/3/2017.
