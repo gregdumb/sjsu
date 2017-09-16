@@ -34,6 +34,8 @@ public class EventCalendarUI
 	 */
 	public void run()
 	{
+		drawCalendar("m");
+
 		while(true)
 		{
 			String choice = drawMainMenu();
@@ -62,11 +64,11 @@ public class EventCalendarUI
 					break;
 				
 				case "d":
-					// @TODO THIS IS VERY BAD
-					cal.exportEvents();
+					drawDeleteMenu();
 					break;
 				
 				case "q":
+					cal.exportEvents();
 					UI.output("Thank you for using the Gregle Calendar");
 					System.exit(0);
 					break;
@@ -76,11 +78,15 @@ public class EventCalendarUI
 			}
 		}
 	}
-	
+
+	/**
+	 * Draws main menu
+	 * @return user's selected choice
+	 */
 	private String drawMainMenu()
 	{
-		drawCalendar();
-		
+		//drawCalendar();
+		UI.outputln(DIVIDER);
 		UI.outputln("Select one of the following options:");
 		UI.outputln("[L]oad  [V]iew by  [C]reate  [G]o to  [E]vent list  [D]elete  [Q]uit");
 		
@@ -89,8 +95,10 @@ public class EventCalendarUI
 		
 		return choice;
 	}
-	
-	// @TODO does nothing at the moment
+
+	/**
+	 * Draws menu to let user load a event file
+	 */
 	private void drawLoadMenu()
 	{
 		String filepath = UI.prompt("Enter your event file path: ");
@@ -128,6 +136,21 @@ public class EventCalendarUI
 				UI.outputln("Displaying by month");
 				break;
 		}
+
+		choice = "";
+
+		while(!choice.equals("m"))
+		{
+			drawCalendar();
+
+			String[] valids2 = {"P", "N", "M"};
+			choice = UI.promptChoice("[P]revious [N]ext [M]ain menu", valids2);
+
+			if(choice.equals("p") || choice.equals("n"))
+			{
+				cal.next(drawMode, choice);
+			}
+		}
 	}
 	
 	/**
@@ -160,20 +183,39 @@ public class EventCalendarUI
 		}
 		
 		Event e = new Event(date, title, startTime, endTime);
-		
-		cal.addEvent(e);
-		
-		UI.outputln("Event added.");
+
+		String conflict = cal.eventConflicts(e);
+		String cont = "y";
+
+		if(!conflict.equals(""))
+		{
+			UI.outputln("New event conflicts with '" + conflict + "', continue adding?");
+			String[] valids = {"Y", "N"};
+			cont = UI.promptChoice("[Y/N] ", valids);
+		}
+
+		if(cont.equals("y"))
+		{
+			cal.addEvent(e);
+			UI.outputln("Event added.");
+		}
+		else
+		{
+			UI.outputln("Adding event canceled");
+		}
 		UI.pause();
 	}
-	
+
+	/**
+	 * Draws menu that lets user select a date
+	 */
 	private void drawGotoMenu()
 	{
 		UI.outputln(DIVIDER);
 		Date goDate = UI.promptDate("Enter a date (mm/dd/yyyy): ", inputDateFormat);
 		
 		cal.setTime(goDate);
-		UI.outputln("Date has been updated");
+		drawCalendar("d");
 	}
 	
 	/** Lists all events */
@@ -187,7 +229,36 @@ public class EventCalendarUI
 		UI.outputln("");
 		UI.pause();
 	}
-	
+
+	/** Lets user delete events */
+	private void drawDeleteMenu()
+	{
+		if(cal.getEvents().isEmpty())
+		{
+			UI.outputln("You don't have any events to delete.");
+		}
+		else
+		{
+			String[] valids = {"A", "S"};
+			String choice = UI.promptChoice("Delete [A]ll or [S]elected day? ", valids);
+
+			if(choice.equals("a"))
+			{
+				cal.deleteEvents();
+			}
+			else
+			{
+				cal.deleteEvents(cal.getTime());
+			}
+
+			UI.outputln("Events deleted");
+		}
+	}
+
+	/**
+	 * Draws calendar to the console
+	 * @param type "m" or "d" for month or day
+	 */
 	private void drawCalendar(String type)
 	{
 		type = type.toLowerCase();
@@ -218,20 +289,18 @@ public class EventCalendarUI
 	private void drawDay()
 	{
 		UI.outputln(DIVIDER);
-		
-		String weekday = cal.weekdayNameFromInt(cal.get(GregorianCalendar.DAY_OF_WEEK));
-		String month = cal.monthNameFromInt(cal.get(GregorianCalendar.MONTH));
-		String day = Integer.toString(cal.get(GregorianCalendar.DAY_OF_MONTH));
-		String year = Integer.toString(cal.get(GregorianCalendar.YEAR));
-		
-		//UI.outputln(weekday + ", " + month + " " + day + ", " + year);
+
 		UI.outputln(dayDateFormat.format(cal.getTime()));
 		
 		drawEvents(cal.getEvents(cal.getTime()));
 		
 		UI.outputln("");
 	}
-	
+
+	/**
+	 * Draws events
+	 * @param events ArrayList of events to draw
+	 */
 	private void drawEvents(ArrayList<Event> events)
 	{
 		if(events == null || events.isEmpty())
@@ -287,9 +356,14 @@ public class EventCalendarUI
 		}
 		
 		// Check if today
-		if(TODAY.get(GregorianCalendar.DATE) == rc.get(GregorianCalendar.DATE))
+		if(TODAY.getTime().equals(rc.getTime()))
 		{
 			daystr = "[" + daystr + "]";
+		}
+		// Check if date has any events
+		else if(!cal.getEvents(rc.getTime()).isEmpty())
+		{
+			daystr = "{" + daystr + "}";
 		}
 		else
 		{
@@ -298,7 +372,12 @@ public class EventCalendarUI
 		
 		return daystr;
 	}
-	
+
+	/**
+	 * Generates whitespace to fill in days of the week
+	 * @param startingDay Day of the week of first day of month
+	 * @return whitespace string
+	 */
 	private String getMonthStartBuffer(int startingDay)
 	{
 		String buffer = "";

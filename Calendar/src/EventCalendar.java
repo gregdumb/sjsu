@@ -10,6 +10,7 @@ import java.text.DateFormatSymbols;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
@@ -21,12 +22,12 @@ public class EventCalendar
 	
 	/** Constants */
 	private final GregorianCalendar TODAY = new GregorianCalendar();
-	private final String DIV = "%%%";
+	public static final String DIV = "%%%";
 	
 	/** Used for event manipulation */
 	private GregorianCalendar gc;
 	private ArrayList<Event> events;
-	private String eventFilePath = "";
+	private String eventFilePath = "events.txt";
 	
 	/**
 	 * Constructor
@@ -35,7 +36,7 @@ public class EventCalendar
 	{
 		//Constructor
 		gc = new GregorianCalendar();
-		events = new ArrayList<Event>();
+		events = new ArrayList<>();
 	}
 	
 	/**********************************************
@@ -117,11 +118,46 @@ public class EventCalendar
 			return events;
 		}
 	}
+
+	public String eventConflicts(Event toCheck)
+	{
+		for(Event e : events)
+		{
+			if(toCheck.conflicts(e))
+			{
+				return e.title;
+			}
+		}
+
+		return "";
+	}
 	
 	/**********************************************
 	 * MUTATORS
 	 */
-	
+
+	/**
+	 * Increments or decrements the current day/month
+	 * @param dayMonth pass "m" for month or "day" for date
+	 * @param direction pass "n" for next or "p" for previous
+	 */
+	public void next(String dayMonth, String direction)
+	{
+		int toModify = 0;
+
+		int dir = (direction.equals("n")) ? 1 : -1;
+
+		if(dayMonth.equals("m"))
+			toModify = GregorianCalendar.MONTH;
+		else
+			toModify = GregorianCalendar.DAY_OF_YEAR;
+
+		int current = gc.get(toModify);
+
+		gc.set(toModify, (current + dir));
+	}
+
+
 	/**
 	 * Adds an event to the calendar
 	 * @param e New event
@@ -130,7 +166,43 @@ public class EventCalendar
 	public boolean addEvent(Event e)
 	{
 		events.add(e);
-		
+		sortEvents();
+		return true;
+	}
+
+	/**
+	 * Deletes all events from the calendar
+	 * @return success
+	 */
+	public boolean deleteEvents()
+	{
+		events.clear();
+		return true;
+	}
+
+	/**
+	 * Deletes events on selected date
+	 * @param date selected date
+	 * @return success
+	 */
+	public boolean deleteEvents(Date date)
+	{
+		DateFormat seekFormat = new SimpleDateFormat("MM/dd/yyyy");
+		String desiredDay = seekFormat.format(date);
+		ArrayList<Event> toRemove = new ArrayList<>();
+
+		for(Event e : events)
+		{
+			String thisDay = seekFormat.format(e.date);
+
+			if(thisDay.equals(desiredDay))
+			{
+				toRemove.add(e);
+			}
+		}
+
+		events.removeAll(toRemove);
+
 		return true;
 	}
 	
@@ -173,7 +245,6 @@ public class EventCalendar
 		try
 		{
 			FileReader freader = new FileReader(path);
-			
 			BufferedReader breader = new BufferedReader(freader);
 			String line = "";
 			
@@ -181,6 +252,8 @@ public class EventCalendar
 				Event e = parseEventString(line);
 				events.add(e);
 			}
+
+			Collections.sort(events);
 			
 			eventFilePath = path;
 			
@@ -235,7 +308,25 @@ public class EventCalendar
 		
 		return false;
 	}
-	
+
+	/**********************************************
+	 * UTILITIES
+	 */
+
+	/**
+	 * Sorts all events
+	 */
+	private void sortEvents()
+	{
+		Collections.sort(events);
+	}
+
+	/**
+	 * Converts a string of format title%%%date%%%starttime%%%endtime into an event
+	 * @param s string to convert
+	 * @return created event
+	 * @throws ParseException
+	 */
 	private Event parseEventString(String s) throws ParseException
 	{
 		DateFormat df = EventCalendarUI.inputDateFormat;
@@ -249,13 +340,18 @@ public class EventCalendar
 		
 		return new Event(date, title, startTime, endTime);
 	}
-	
+
+	/**
+	 * Turns an event into a string of the form title%%%date%%%starttime%%%endtime
+	 * @param e event to convert
+	 * @return converted string
+	 */
 	private String encodeEventString(Event e)
 	{
 		DateFormat df = EventCalendarUI.inputDateFormat;
 		DateFormat tf = EventCalendarUI.inputTimeFormat;
 		
-		String title = e.title;
+		String title = e.title.replace("%%%", "");
 		String date = df.format(e.date);
 		String startTime = tf.format(e.startTime);
 		String endTime = tf.format(e.endTime);
