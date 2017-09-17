@@ -5,20 +5,35 @@ import java.util.Date;
 import java.util.Scanner;
 
 /**
- * Created by Greg on 9/3/2017.
+ * General CLUI class
+ * @author Greg Brisebois
+ * @version 1.0
  */
 public class UI
 {
 	public static DateFormat eventDateFormat = new SimpleDateFormat("MM/dd/yyyy");
-
+	
+	/**
+	 * Display output text with newline at end
+	 * @param text to display
+	 */
 	public static void outputln(String text) {
 		System.out.println(text);
 	}
-
+	
+	/**
+	 * Display output text on single line
+	 * @param text to display
+	 */
 	public static void output(String text) {
 		System.out.print(text);
 	}
-
+	
+	/**
+	 * Prompt user to input anything (can be empty string)
+	 * @param text prompt text
+	 * @return string entered by user
+	 */
 	public static String prompt(String text) {
 
 		System.out.print(text);
@@ -29,6 +44,11 @@ public class UI
 		return s;
 	}
 	
+	/**
+	 * Prompt user to input a string
+	 * @param text prompt text
+	 * @return string entered by user
+	 */
 	public static String promptString(String text)
 	{
 		String s = "";
@@ -50,26 +70,12 @@ public class UI
 		return s;
 	}
 	
-	public static String promptTime(String text)
-	{
-		String s = "";
-		boolean valid = false;
-		
-		while(!valid)
-		{
-			s = prompt(text);
-			valid = isValidTime(s);
-			
-			if(!valid)
-			{
-				outputln("Must be a 24h time in the format of 12:24");
-				//outputln("Must be a date in the format of mm/dd/yyyy");
-			}
-		}
-		
-		return s;
-	}
-
+	/**
+	 * Prompt user to enter a date (or time)
+	 * @param text prompt text
+	 * @param dateFormat format of date they have to enter
+	 * @return the date they entered
+	 */
 	public static Date promptDate(String text, DateFormat dateFormat)
 	{
 		Date returnDate = null;
@@ -87,14 +93,19 @@ public class UI
 			}
 			catch ( ParseException exc )
 			{
-				outputln("Please enter a date in the format " + dateFormat.toString());
+				outputln("Please enter a date/time in the format specified ");
 			}
 		}
 
 		return returnDate;
 	}
 	
-	/** Prompts for input and checks for validity with given array of possible choices */
+	/**
+	 * Prompt user to enter from a selection of choices
+	 * @param text prompt text
+	 * @param choices array of possible things they can enter
+	 * @return string entered by user
+	 */
 	public static String promptChoice(String text, String[] choices)
 	{
 		// Show prompt
@@ -130,6 +141,11 @@ public class UI
 		return s;
 	}
 	
+	/**
+	 * Prompt user to enter an integer
+	 * @param text prompt text
+	 * @return integer they entered
+	 */
 	public static int promptInt(String text) {
 		System.out.print(text);
 		
@@ -139,40 +155,12 @@ public class UI
 		return s;
 	}
 	
+	/**
+	 * Pause the CLUI and wait for user to press enter
+	 */
 	public static void pause()
 	{
 		output("Press Enter to continue...");
 		prompt("");
-	}
-	
-	public static boolean isValidTime(String t)
-	{
-		DateFormat df = new SimpleDateFormat("k:mm");
-		
-		try
-		{
-			df.parse(t);
-			return true;
-		}
-		catch ( ParseException exc )
-		{
-		}
-		
-		return false;
-	}
-
-	public static boolean isValidDate(String d)
-	{
-		try
-		{
-			eventDateFormat.parse(d);
-			output("$$$ Date was valid");
-			return true;
-		}
-		catch ( ParseException exc )
-		{
-		}
-
-		return false;
 	}
 }

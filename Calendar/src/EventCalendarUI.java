@@ -5,7 +5,10 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 /**
- * Created by Greg on 9/7/2017.
+ * Homework #1: Calendar
+ * UI of the event calendar
+ * @author Greg Brisebois
+ * @version 1.0
  */
 public class EventCalendarUI
 {
@@ -34,6 +37,7 @@ public class EventCalendarUI
 	 */
 	public void run()
 	{
+		drawHelp();
 		drawCalendar("m");
 
 		while(true)
@@ -78,6 +82,16 @@ public class EventCalendarUI
 			}
 		}
 	}
+	
+	/**
+	 * Draws some basic information to help the user
+	 */
+	public void drawHelp()
+	{
+		UI.outputln("Welcome to the Calendar");
+		UI.outputln("Selected day is highlighted with [ ]");
+		UI.outputln("Days with events are highlighted with { }");
+	}
 
 	/**
 	 * Draws main menu
@@ -101,7 +115,8 @@ public class EventCalendarUI
 	 */
 	private void drawLoadMenu()
 	{
-		String filepath = UI.prompt("Enter your event file path: ");
+		String filepath = "events.txt"; // UI.prompt("Enter your event file path: ");
+		UI.outputln("Loading files from events.txt..");
 		
 		boolean success = cal.importEvents(filepath); //importEvents();
 		
@@ -326,6 +341,7 @@ public class EventCalendarUI
 		UI.outputln(" S   M   T   W   T   F   S");
 		
 		rc.set(GregorianCalendar.MONTH, cal.get(GregorianCalendar.MONTH));
+		rc.set(GregorianCalendar.YEAR, cal.get(GregorianCalendar.YEAR));
 		rc.set(GregorianCalendar.DAY_OF_MONTH, 1);
 		UI.output(getMonthStartBuffer(rc.get(GregorianCalendar.DAY_OF_WEEK)));
 		
@@ -356,7 +372,7 @@ public class EventCalendarUI
 		}
 		
 		// Check if today
-		if(TODAY.getTime().equals(rc.getTime()))
+		if(inputDateFormat.format(cal.getTime()).equals(inputDateFormat.format(rc.getTime())))
 		{
 			daystr = "[" + daystr + "]";
 		}

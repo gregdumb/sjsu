@@ -3,14 +3,16 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Created by Greg on 9/5/2017.
+ * Homework #1: Calendar
+ * Represents a single event
+ * @author Greg Brisebois
+ * @version 1.0
  */
 public class Event implements Comparable<Event>
 {
 	public Date date;
 	public String title;
 	
-	//private String startTime;
 	public Date startTime;
 	public Date endTime;
 	
@@ -51,7 +53,12 @@ public class Event implements Comparable<Event>
 		UI.output("\t\t");
 		UI.outputln(title);
 	}
-
+	
+	/**
+	 * Check if this event overlaps with a particular event
+	 * @param e other event to check with
+	 * @return true if overlaps
+	 */
 	public boolean conflicts(Event e)
 	{
 		DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
@@ -67,13 +74,22 @@ public class Event implements Comparable<Event>
 		return false;
 	}
 	
+	/**
+	 * Convert event to simple string
+	 * @return string of event title and date
+	 */
 	public String toString()
 	{
 		String prettyDate = UI.eventDateFormat.format(date);
 		
 		return prettyDate + "\t\t" + title;
 	}
-
+	
+	/**
+	 * Used for sorting
+	 * @param o
+	 * @return
+	 */
 	@Override
 	public int compareTo(Event o)
 	{

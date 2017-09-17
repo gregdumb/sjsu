@@ -1,8 +1,8 @@
-
-import java.text.DateFormatSymbols;
-
 /**
- * Created by Greg on 9/3/2017.
+ * Homework #1: Calendar
+ * Just instantiates and runs the calendar
+ * @author Greg Brisebois
+ * @version 1.0
  */
 public class Main
 {
@@ -10,15 +10,5 @@ public class Main
 		
 		EventCalendarUI myCal = new EventCalendarUI();
 		myCal.run();
-		//myCal.draw("month");
-	}
-
-	private static String monthName(int monthInt) {
-
-		if(monthInt > 11 || monthInt < 0) {
-			monthInt = 0;
-		}
-
-		return new DateFormatSymbols().getMonths()[monthInt];
 	}
 }

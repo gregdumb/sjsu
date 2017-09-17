@@ -1,9 +1,3 @@
-/**
- * Homework #1: A calendar that you can store events on
- * @author Greg Brisebois
- * @version 1.0
- */
-
 import java.io.*;
 import java.text.DateFormat;
 import java.text.DateFormatSymbols;
@@ -14,6 +8,12 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+/**
+ * Homework #1: Calendar
+ * Backend of the event calendar
+ * @author Greg Brisebois
+ * @version 1.0
+ */
 public class EventCalendar
 {
 	/**********************************************
@@ -118,7 +118,12 @@ public class EventCalendar
 			return events;
 		}
 	}
-
+	
+	/**
+	 * Check if an event overlaps with another event
+	 * @param toCheck Event to check
+	 * @return Title of event that it overlaps with, or empty string
+	 */
 	public String eventConflicts(Event toCheck)
 	{
 		for(Event e : events)
@@ -242,6 +247,8 @@ public class EventCalendar
 	 */
 	public boolean importEvents(String path)
 	{
+		eventFilePath = path;
+		
 		try
 		{
 			FileReader freader = new FileReader(path);
@@ -262,7 +269,7 @@ public class EventCalendar
 		}
 		catch (FileNotFoundException e)
 		{
-			UI.outputln("File could not be found");
+			UI.outputln("File not found, but will be created upon exit");
 		}
 		catch (IOException e)
 		{
@@ -278,7 +285,7 @@ public class EventCalendar
 	
 	/**
 	 * Writes events to file
-	 * @return
+	 * @return success
 	 */
 	public boolean exportEvents()
 	{
