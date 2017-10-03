@@ -1,7 +1,8 @@
 import java.util.Date;
 
 /**
- * Created by Greg on 9/26/2017.
+ * Member of a bank, contains user information and balance
+ * @author Greg Brisebois
  */
 public class Member
 {
@@ -22,36 +23,66 @@ public class Member
 		balance = money;
 	}
 	
+	/**
+	 * Get name
+	 * @return name
+	 */
 	public String getName()
 	{
 		return name;
 	}
 	
+	/**
+	 * Get bank of user
+	 * @return bank
+	 */
 	public String getBank()
 	{
 		return bank;
 	}
 	
+	/**
+	 * Get card number
+	 * @return card number
+	 */
 	public String getCard()
 	{
 		return card;
 	}
 	
+	/**
+	 * Check a user's password
+	 * @param pwd password to check
+	 * @return true if is correct password
+	 */
 	public boolean checkPassword(String pwd)
 	{
 		return pwd.equals(password);
 	}
 	
+	/**
+	 * Get expiration date of user's account
+	 * @return expiration date
+	 */
 	public Date getExpirationDate()
 	{
 		return expires;
 	}
 	
+	/**
+	 * Get user's balance
+	 * @return balance
+	 */
 	public long getBalance()
 	{
 		return balance;
 	}
 	
+	/**
+	 * Withdraw money from user's account
+	 * @param amount amount to withdraw
+	 * @return true if withdraw was successful
+	 */
 	public boolean withdraw(long amount)
 	{
 		if(amount > balance)

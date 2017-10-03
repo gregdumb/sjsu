@@ -6,7 +6,8 @@ import java.util.Date;
 import java.util.Locale;
 
 /**
- * Created by Greg on 9/26/2017.
+ * Creates the CLUI for the ATMs' interfaces
+ * @author Greg Brisebois
  */
 public class ATMUI
 {
@@ -19,13 +20,16 @@ public class ATMUI
 		for(Bank b : banks)
 		{
 			ATM atm1 = new ATM(b.getName() + " 1", b, 5000);
-			ATM atm2 = new ATM(b.getName() + " 2", b, 2000);
+			ATM atm2 = new ATM(b.getName() + " 2", b, 10000);
 			
 			atms.add(atm1);
 			atms.add(atm2);
 		}
 	}
 	
+	/**
+	 * Starts the CLUI
+	 */
 	public void start()
 	{
 		UI.outputln("Welcome! The following ATMs are available:");
@@ -48,6 +52,11 @@ public class ATMUI
 		transactionMenu(m);
 	}
 	
+	/**
+	 * Draws the login menu
+	 * @param bank - Bank to log user in to
+	 * @return - reference to the logged in member
+	 */
 	private Member loginMenu(Bank bank)
 	{
 		boolean valid = false;
@@ -88,6 +97,10 @@ public class ATMUI
 		return null;
 	}
 	
+	/**
+	 * Draw transaction menu
+	 * @param member - member that is logged in
+	 */
 	private void transactionMenu(Member member)
 	{
 		boolean keepGoing = true;
@@ -117,7 +130,8 @@ public class ATMUI
 				
 				if (selectedATM.getMaxTransaction() < iamount)
 				{
-					UI.outputln("You're trying to take too much money");
+					String maxString = makeMoneyString(selectedATM.getMaxTransaction());
+					UI.outputln("You cannot withdraw more than " + maxString + " per transaction at this ATM");
 				}
 				else if (member.withdraw(iamount))
 				{
@@ -125,7 +139,7 @@ public class ATMUI
 				}
 				else
 				{
-					UI.outputln("You don't have enough money you pleb");
+					UI.outputln("You don't have enough money for that transaction");
 				}
 			}
 			else
@@ -135,6 +149,11 @@ public class ATMUI
 		}
 	}
 	
+	/**
+	 * Utility, checks if a string can be parsed into a float
+	 * @param s string to check
+	 * @return true if it's a float
+	 */
 	public static boolean stringIsFloat(String s)
 	{
 		try
@@ -149,6 +168,11 @@ public class ATMUI
 		return true;
 	}
 	
+	/**
+	 * Converts an int where 1 = 1cent to a formatted string
+	 * @param i money int
+	 * @return formatted string
+	 */
 	public static String makeMoneyString(long i)
 	{
 		NumberFormat n = NumberFormat.getCurrencyInstance(Locale.US);

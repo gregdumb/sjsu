@@ -5,9 +5,10 @@ import java.util.ArrayList;
 import java.util.Date;
 
 /**
- * Created by Greg on 9/22/2017.
+ * Main class that starts ATMs
+ * @author Greg Brisebois
  */
-public class Main
+public class ATMSystem
 {
 	public static DateFormat df = new SimpleDateFormat("MM/dd/yyyy");
 	public static Date future, past;
@@ -20,18 +21,17 @@ public class Main
 			past = df.parse("1/1/2017");
 		}
 		catch(ParseException e)
-		{
-		}
+		{} // They will for sure work
 		
 		ArrayList<Bank> banks = new ArrayList<>();
 		banks.add(new Bank("Wells Fargo"));
 		banks.add(new Bank("Bank of America"));
 		
-		banks.get(0).addMember("Jimmy John", "1234", "pwd", past);
-		banks.get(0).addMember("Bruce Wayne", "5678", "batman", future);
+		banks.get(0).addMember("Jimmy John", "1234", "pwd", past, 4000);
+		banks.get(0).addMember("Bruce Wayne", "5678", "batman", future, 1000000000000L);
 		
-		banks.get(1).addMember("Jessica Chavez", "2468", "hunter2", future);
-		banks.get(1).addMember("Capitan ", "1357", "hunter2", future);
+		banks.get(1).addMember("Jessica Chavez", "2468", "yellow", future, 50000);
+		banks.get(1).addMember("Capitan Haddock", "1357", "hunter2", future, 3500000);
 		//banks.get(1).addMember()
 		
 		ATMUI atmInstance = new ATMUI(banks);

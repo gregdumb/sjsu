@@ -7,11 +7,11 @@ import java.util.Scanner;
 /**
  * General CLUI class
  * @author Greg Brisebois
- * @version 1.0
+ * @version 2.0
  */
 public class UI
 {
-	public static DateFormat eventDateFormat = new SimpleDateFormat("MM/dd/yyyy");
+	public static DateFormat basicDateFormat = new SimpleDateFormat("MM/dd/yyyy");
 	
 	/**
 	 * Display output text with newline at end
@@ -155,6 +155,13 @@ public class UI
 		return s;
 	}
 	
+	/**
+	 * Prompt user to enter an int within a specified range (inclusive)
+	 * @param text prompt text
+	 * @param min minimum acceptable int
+	 * @param max maximum acceptable int
+	 * @return entered int
+	 */
 	public static int promptIntRange(String text, int min, int max)
 	{
 		boolean valid = false;
@@ -180,6 +187,11 @@ public class UI
 		return input;
 	}
 	
+	/**
+	 * Prompt user to enter a float
+	 * @param text prompt text
+	 * @return entered float
+	 */
 	public static float promptFloat(String text) {
 		System.out.print(text);
 		
