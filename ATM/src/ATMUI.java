@@ -44,9 +44,6 @@ public class ATMUI
 		
 		UI.outputln("Using ATM: " + selectedATM.getId());
 		
-		UI.outputln("Bank has members: ");
-		selectedATM.getBank().printMembers();
-		
 		Member m = loginMenu(selectedATM.getBank());
 		
 		transactionMenu(m);

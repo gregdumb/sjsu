@@ -22,7 +22,16 @@ public class Member
 		expires = e;
 		balance = money;
 	}
-	
+
+	/**
+	 * Get password, VERY INSECURE FOR DEBUGGING ONLY!!!
+	 * @return password
+	 */
+	public String getPassword()
+	{
+		return password;
+	}
+
 	/**
 	 * Get name
 	 * @return name

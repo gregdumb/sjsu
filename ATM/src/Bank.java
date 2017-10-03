@@ -16,13 +16,13 @@ public class Bank
 	}
 	
 	/**
-	 * Print a list of the bank's members (for debugging only)
+	 * Print a list of the bank's members FOR GRADING/TESTING PURPOSES ONLY
 	 */
 	public void printMembers()
 	{
 		for(Member m : members)
 		{
-			UI.outputln(m.getName() + " " + m.getCard());
+			UI.outputln("*     " + m.getName() + ", card: " + m.getCard() + ", pwd: " + m.getPassword());
 		}
 	}
 	
