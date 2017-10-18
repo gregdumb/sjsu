@@ -1,5 +1,4 @@
 import javax.swing.*;
-import javax.swing.Timer;
 import java.awt.*;
 import java.util.*;
 
@@ -14,11 +13,9 @@ public class ClockFrame
 
 		frame.setSize(500, 500);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-
+		
 		JLabel iconTester = new JLabel("Clock");
-
-		Icon icon = new ColoredSquare(Color.BLUE);
+		Icon icon = new ClockIcon();
 		iconTester.setIcon(icon);
 
 		frame.getContentPane().add(iconTester);
