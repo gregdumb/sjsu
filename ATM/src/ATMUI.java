@@ -32,6 +32,18 @@ public class ATMUI
 	 */
 	public void start()
 	{
+		UI.outputln("*****************************************************");
+		UI.outputln("* ATMs: ");
+		
+		for(ATM a : atms)
+		{
+			UI.outputln("*   " + a.getId());
+			UI.outputln("*     Bank: " + a.getBank().getName());
+			UI.outputln("*     Max withdraw: " + makeMoneyString(a.getMaxTransaction()));
+		}
+		
+		UI.outputln("*****************************************************\n");
+		
 		UI.outputln("Welcome! The following ATMs are available:");
 		
 		for(int i = 1; i <= atms.size(); i++)
