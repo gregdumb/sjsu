@@ -35,9 +35,9 @@ public class Event implements Comparable<Event>
 	 */
 	public void draw()
 	{
-		String prettyDate = EventCalendarUI.inputDateFormat.format(date);
-		String prettyStartTime = EventCalendarUI.inputTimeFormat.format(startTime);
-		String prettyEndTime = EventCalendarUI.inputTimeFormat.format(endTime);
+		String prettyDate = EventCalendarCLUI.inputDateFormat.format(date);
+		String prettyStartTime = EventCalendarCLUI.inputTimeFormat.format(startTime);
+		String prettyEndTime = EventCalendarCLUI.inputTimeFormat.format(endTime);
 
 		UI.output("\t");
 		UI.output(prettyDate);
