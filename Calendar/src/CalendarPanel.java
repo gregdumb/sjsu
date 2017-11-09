@@ -2,53 +2,77 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 
 /**
  * Created by Greg on 11/9/2017.
  */
 public class CalendarPanel extends JPanel {
-
+	
+	// Date formats
+	public static final DateFormat monthDateFormat = new SimpleDateFormat("MMMMM yyyy");
+	
 	private GregorianCalendar rc;
 	private EventCalendar cal;
 
-	private int DAY_WIDTH = 60;
-	private int DAY_HEIGHT = 50;
+	// UI Properties
+	private final int DAY_WIDTH = 60;
+	private final int DAY_HEIGHT = 50;
+	private final int DAY_SPACING = 10;
+	
+	private final int MONTH_LABEL_SIZE = 20;
+	
+	private JPanel dayGridPanel;
+	private JLabel monthLabel;
 
 	public CalendarPanel(EventCalendar cal) {
 
 		this.rc = new GregorianCalendar();
 		this.cal = cal;
+		
+		// Container panel
+		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+		
+		// Grid panel
+		dayGridPanel = new JPanel();
+		dayGridPanel.setLayout(new GridLayout(0, 7, DAY_SPACING, DAY_SPACING));
+		
+		monthLabel = new JLabel();
+		monthLabel.setFont(new Font(monthLabel.getFont().getName(), Font.PLAIN, MONTH_LABEL_SIZE));
 
-		this.setLayout(new GridLayout(0, 7));
-
+		this.add(monthLabel);
+		this.add(dayGridPanel);
+		
 		this.draw();
 	}
 
 	public void draw() {
-		this.removeAll();
+		// Clear old grid
+		dayGridPanel.removeAll();
 
 		// Update Render Calendar
 		rc.set(GregorianCalendar.MONTH, cal.get(GregorianCalendar.MONTH));
 		rc.set(GregorianCalendar.YEAR, cal.get(GregorianCalendar.YEAR));
 		rc.set(GregorianCalendar.DAY_OF_MONTH, 1);
-
-
-		for(int i = 0; i < rc.get(GregorianCalendar.DAY_OF_WEEK); i++) {
+		
+		UI.outputln("DAY OF WEEK " + Integer.toString(rc.get(GregorianCalendar.DAY_OF_WEEK)));
+		
+		// Draw blank spaces on grid
+		for(int i = 1; i < rc.get(GregorianCalendar.DAY_OF_WEEK); i++) {
 			//JLabel blank = new JLabel(" ");
 			//this.add(blank);
 			DayComponent blankDay = new DayComponent(0, DAY_WIDTH, DAY_HEIGHT);
-			this.add(blankDay);
+			dayGridPanel.add(blankDay);
 		}
 
 		int daysInMonth = rc.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
-
+		
+		// Draw days on grid
 		for(int i = 1; i <= daysInMonth; i++) {
-
-			//JLabel number = new JLabel(Integer.toString(i));
-			//this.add(number);
 			DayComponent day = new DayComponent(i, DAY_WIDTH, DAY_HEIGHT);
-			this.add(day);
+			dayGridPanel.add(day);
 
 			day.addMouseListener(new MouseAdapter() {
 				@Override
@@ -59,6 +83,9 @@ public class CalendarPanel extends JPanel {
 				}
 			});
 		}
+		
+		// Update month label
+		monthLabel.setText(monthDateFormat.format(cal.getTime()));
 
 		this.revalidate();
 	}
@@ -87,7 +114,7 @@ public class CalendarPanel extends JPanel {
 					g2d.setColor(Color.RED);
 				}
 
-				g2d.drawRect(0, 0, this.getWidth() - 2, this.getHeight() - 2);
+				g2d.drawRect(0, 0, this.getWidth() - 1, this.getHeight() - 1);
 				g2d.drawString(drawDay, 10, 20);
 
 

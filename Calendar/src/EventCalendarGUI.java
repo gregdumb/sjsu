@@ -1,13 +1,17 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
 
 /**
  * Created by Greg on 11/9/2017.
  */
 public class EventCalendarGUI {
-
+	
+	
+	// Event calendar
 	private final EventCalendar cal;
 
 	// Render calendar
@@ -17,6 +21,7 @@ public class EventCalendarGUI {
 	private final JFrame frame;
 	private final JPanel panel;
 
+	// GUI properties
 	private final String FRAME_TITLE = "Gregle Calendar";
 
 	public EventCalendarGUI() {
@@ -32,10 +37,6 @@ public class EventCalendarGUI {
 		// Layout panel
 		panel = new JPanel();
 
-		// Month label
-		JLabel monthLabel = new JLabel();
-		monthLabel.setText(Integer.toString((cal.getCal().get(GregorianCalendar.MONTH))));
-
 		// Calendar
 		CalendarPanel calPanel = new CalendarPanel(cal);
 
@@ -44,13 +45,11 @@ public class EventCalendarGUI {
 		nextButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				cal.next("d", "n");
-				monthLabel.setText(Integer.toString((cal.getCal().get(GregorianCalendar.MONTH))));
+				cal.next("m", "n");
 				calPanel.draw();
 			}
 		});
 
-		panel.add(monthLabel);
 		panel.add(calPanel);
 		panel.add(nextButton);
 		frame.add(panel);
