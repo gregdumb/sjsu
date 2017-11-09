@@ -336,8 +336,8 @@ public class EventCalendar
 	 */
 	private Event parseEventString(String s) throws ParseException
 	{
-		DateFormat df = EventCalendarUI.inputDateFormat;
-		DateFormat tf = EventCalendarUI.inputTimeFormat;
+		DateFormat df = EventCalendarCLUI.inputDateFormat;
+		DateFormat tf = EventCalendarCLUI.inputTimeFormat;
 		String[] elements = s.split(DIV);
 		
 		String title = elements[0];
@@ -355,8 +355,8 @@ public class EventCalendar
 	 */
 	private String encodeEventString(Event e)
 	{
-		DateFormat df = EventCalendarUI.inputDateFormat;
-		DateFormat tf = EventCalendarUI.inputTimeFormat;
+		DateFormat df = EventCalendarCLUI.inputDateFormat;
+		DateFormat tf = EventCalendarCLUI.inputTimeFormat;
 		
 		String title = e.title.replace("%%%", "");
 		String date = df.format(e.date);

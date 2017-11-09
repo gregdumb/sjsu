@@ -8,7 +8,9 @@ public class Main
 {
 	public static void main(String[] args) {
 		
-		EventCalendarUI myCal = new EventCalendarUI();
-		myCal.run();
+		//EventCalendarCLUI myCal = new EventCalendarCLUI();
+		//myCal.run();
+
+		EventCalendarGUI myCalGUI = new EventCalendarGUI();
 	}
 }

@@ -10,7 +10,7 @@ import java.util.GregorianCalendar;
  * @author Greg Brisebois
  * @version 1.0
  */
-public class EventCalendarUI
+public class EventCalendarCLUI
 {
 	private final GregorianCalendar TODAY = new GregorianCalendar();
 	private final String DIVIDER = "\n____________________________";
@@ -26,7 +26,7 @@ public class EventCalendarUI
 	// Render calendar
 	GregorianCalendar rc = new GregorianCalendar();
 	
-	public EventCalendarUI()
+	public EventCalendarCLUI()
 	{
 		cal = new EventCalendar();
 		drawMode = "m";
