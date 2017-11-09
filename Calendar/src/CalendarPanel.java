@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.GregorianCalendar;
 
 /**
@@ -47,6 +49,15 @@ public class CalendarPanel extends JPanel {
 			//this.add(number);
 			DayComponent day = new DayComponent(i, DAY_WIDTH, DAY_HEIGHT);
 			this.add(day);
+
+			day.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					UI.outputln("Clicked on " + day.drawDay);
+					cal.getCal().set(GregorianCalendar.DAY_OF_MONTH, day.day);
+					draw();
+				}
+			});
 		}
 
 		this.revalidate();
@@ -71,8 +82,15 @@ public class CalendarPanel extends JPanel {
 			Graphics2D g2d = (Graphics2D) g;
 
 			if(day > 0) {
+
+				if(day == cal.get(GregorianCalendar.DAY_OF_MONTH)) {
+					g2d.setColor(Color.RED);
+				}
+
 				g2d.drawRect(0, 0, this.getWidth() - 2, this.getHeight() - 2);
 				g2d.drawString(drawDay, 10, 20);
+
+
 			}
 		}
 

@@ -1,4 +1,6 @@
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.GregorianCalendar;
 
 /**
@@ -27,11 +29,30 @@ public class EventCalendarGUI {
 		frame.setTitle(FRAME_TITLE);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+		// Layout panel
 		panel = new JPanel();
 
+		// Month label
+		JLabel monthLabel = new JLabel();
+		monthLabel.setText(Integer.toString((cal.getCal().get(GregorianCalendar.MONTH))));
+
+		// Calendar
 		CalendarPanel calPanel = new CalendarPanel(cal);
 
+		// Next button
+		JButton nextButton = new JButton("Next");
+		nextButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				cal.next("d", "n");
+				monthLabel.setText(Integer.toString((cal.getCal().get(GregorianCalendar.MONTH))));
+				calPanel.draw();
+			}
+		});
+
+		panel.add(monthLabel);
 		panel.add(calPanel);
+		panel.add(nextButton);
 		frame.add(panel);
 
 		frame.pack();
