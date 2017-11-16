@@ -1,3 +1,5 @@
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.io.*;
 import java.text.DateFormat;
 import java.text.DateFormatSymbols;
@@ -24,6 +26,9 @@ public class EventCalendar
 	private final GregorianCalendar TODAY = new GregorianCalendar();
 	public static final String DIV = "%%%";
 	
+	/** Change listeners */
+	private ArrayList<ChangeListener> listeners;
+	
 	/** Used for event manipulation */
 	private GregorianCalendar gc;
 	private ArrayList<Event> events;
@@ -37,6 +42,7 @@ public class EventCalendar
 		//Constructor
 		gc = new GregorianCalendar();
 		events = new ArrayList<>();
+		listeners = new ArrayList<>();
 	}
 	
 	/**********************************************
@@ -78,6 +84,16 @@ public class EventCalendar
 	public void setTime(Date newDate)
 	{
 		gc.setTime(newDate);
+		this.changed();
+	}
+	
+	/**
+	 * Set the day of the month
+	 * @param day new day
+	 */
+	public void setDay(int day) {
+		gc.set(GregorianCalendar.DAY_OF_MONTH, day);
+		this.changed();
 	}
 	
 	/**
@@ -160,6 +176,8 @@ public class EventCalendar
 		int current = gc.get(toModify);
 
 		gc.set(toModify, (current + dir));
+		
+		this.changed();
 	}
 
 
@@ -172,6 +190,7 @@ public class EventCalendar
 	{
 		events.add(e);
 		sortEvents();
+		this.changed();
 		return true;
 	}
 
@@ -182,6 +201,7 @@ public class EventCalendar
 	public boolean deleteEvents()
 	{
 		events.clear();
+		this.changed();
 		return true;
 	}
 
@@ -207,7 +227,9 @@ public class EventCalendar
 		}
 
 		events.removeAll(toRemove);
-
+		
+		this.changed();
+		
 		return true;
 	}
 	
@@ -279,6 +301,8 @@ public class EventCalendar
 		{
 			UI.outputln("FATAL ERROR PARSING FILE");
 		}
+		
+		this.changed();
 		
 		return false;
 	}
@@ -364,5 +388,22 @@ public class EventCalendar
 		String endTime = tf.format(e.endTime);
 		
 		return title + DIV + date + DIV + startTime + DIV + endTime;
+	}
+	
+	/**
+	 * Attach a new listener
+	 * @param l
+	 */
+	public void attach(ChangeListener l) {
+		this.listeners.add(l);
+	}
+	
+	/**
+	 * Updates everybody that's listening to us
+	 */
+	private void changed() {
+		for(ChangeListener l : listeners) {
+			l.stateChanged(new ChangeEvent(this));
+		}
 	}
 }

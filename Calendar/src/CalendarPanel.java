@@ -39,9 +39,11 @@ public class CalendarPanel extends JPanel {
 		dayGridPanel = new JPanel();
 		dayGridPanel.setLayout(new GridLayout(0, 7, DAY_SPACING, DAY_SPACING));
 		
-		monthLabel = new JLabel();
+		// Month label
+		monthLabel = new JLabel("", SwingConstants.LEFT);
 		monthLabel.setFont(new Font(monthLabel.getFont().getName(), Font.PLAIN, MONTH_LABEL_SIZE));
 
+		// Add components
 		this.add(monthLabel);
 		this.add(dayGridPanel);
 		
@@ -56,8 +58,6 @@ public class CalendarPanel extends JPanel {
 		rc.set(GregorianCalendar.MONTH, cal.get(GregorianCalendar.MONTH));
 		rc.set(GregorianCalendar.YEAR, cal.get(GregorianCalendar.YEAR));
 		rc.set(GregorianCalendar.DAY_OF_MONTH, 1);
-		
-		UI.outputln("DAY OF WEEK " + Integer.toString(rc.get(GregorianCalendar.DAY_OF_WEEK)));
 		
 		// Draw blank spaces on grid
 		for(int i = 1; i < rc.get(GregorianCalendar.DAY_OF_WEEK); i++) {
@@ -74,12 +74,12 @@ public class CalendarPanel extends JPanel {
 			DayComponent day = new DayComponent(i, DAY_WIDTH, DAY_HEIGHT);
 			dayGridPanel.add(day);
 
+			// Add click event to day
 			day.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					UI.outputln("Clicked on " + day.drawDay);
-					cal.getCal().set(GregorianCalendar.DAY_OF_MONTH, day.day);
-					draw();
+					cal.setDay(day.day);
 				}
 			});
 		}
@@ -89,9 +89,19 @@ public class CalendarPanel extends JPanel {
 
 		this.revalidate();
 	}
-
+	
+	private boolean dayIsVisible() {
+		boolean yearMatches = (cal.get(GregorianCalendar.YEAR) == rc.get(GregorianCalendar.YEAR));
+		boolean monthMatches = (cal.get(GregorianCalendar.MONTH) == rc.get(GregorianCalendar.MONTH));
+		
+		return yearMatches && monthMatches;
+	}
+	
+	/**
+	 * Represents a square day on the calendar
+	 */
 	class DayComponent extends JComponent {
-
+		
 		private int day;
 		private String drawDay;
 

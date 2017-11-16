@@ -1,4 +1,6 @@
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DateFormat;
@@ -8,7 +10,7 @@ import java.util.GregorianCalendar;
 /**
  * Created by Greg on 11/9/2017.
  */
-public class EventCalendarGUI {
+public class EventCalendarGUI implements ChangeListener {
 	
 	
 	// Event calendar
@@ -20,6 +22,7 @@ public class EventCalendarGUI {
 	// GUI elements
 	private final JFrame frame;
 	private final JPanel panel;
+	private final CalendarPanel calPanel;
 
 	// GUI properties
 	private final String FRAME_TITLE = "Gregle Calendar";
@@ -28,6 +31,9 @@ public class EventCalendarGUI {
 
 		rc = new GregorianCalendar();
 		cal = new EventCalendar();
+		
+		// Attach to model
+		cal.attach(this);
 
 		// Set up GUI
 		frame = new JFrame();
@@ -38,18 +44,16 @@ public class EventCalendarGUI {
 		panel = new JPanel();
 
 		// Calendar
-		CalendarPanel calPanel = new CalendarPanel(cal);
+		calPanel = new CalendarPanel(cal);
 
+		JButton previousButton = new JButton("Previous");
+		previousButton.addActionListener(e -> cal.next("m", "p"));
+		
 		// Next button
 		JButton nextButton = new JButton("Next");
-		nextButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				cal.next("m", "n");
-				calPanel.draw();
-			}
-		});
+		nextButton.addActionListener(e -> cal.next("m", "n"));
 
+		panel.add(previousButton);
 		panel.add(calPanel);
 		panel.add(nextButton);
 		frame.add(panel);
@@ -57,5 +61,9 @@ public class EventCalendarGUI {
 		frame.pack();
 		frame.setVisible(true);
 	}
-
+	
+	@Override
+	public void stateChanged(ChangeEvent e) {
+		calPanel.draw();
+	}
 }

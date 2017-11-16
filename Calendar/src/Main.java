@@ -11,6 +11,9 @@ public class Main
 		//EventCalendarCLUI myCal = new EventCalendarCLUI();
 		//myCal.run();
 
+		EventCalendar myCal = new EventCalendar();
 		EventCalendarGUI myCalGUI = new EventCalendarGUI();
+		
+		//myCal.attach(myCalGUI);
 	}
 }
