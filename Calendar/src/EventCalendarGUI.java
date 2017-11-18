@@ -1,10 +1,12 @@
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
 /**
@@ -23,6 +25,7 @@ public class EventCalendarGUI implements ChangeListener {
 	private final JFrame frame;
 	private final JPanel panel;
 	private final CalendarPanel calPanel;
+	private final JTextArea eventArea;
 
 	// GUI properties
 	private final String FRAME_TITLE = "Gregle Calendar";
@@ -31,6 +34,8 @@ public class EventCalendarGUI implements ChangeListener {
 
 		rc = new GregorianCalendar();
 		cal = new EventCalendar();
+
+		cal.importEvents("events.txt");
 		
 		// Attach to model
 		cal.attach(this);
@@ -53,17 +58,38 @@ public class EventCalendarGUI implements ChangeListener {
 		JButton nextButton = new JButton("Next");
 		nextButton.addActionListener(e -> cal.next("m", "n"));
 
+		// Event display
+		eventArea = new JTextArea("Helloo");
+		eventArea.setPreferredSize(new Dimension(300, 300));
+		eventArea.setEditable(false);
+
 		panel.add(previousButton);
 		panel.add(calPanel);
 		panel.add(nextButton);
+		panel.add(eventArea);
 		frame.add(panel);
 
 		frame.pack();
 		frame.setVisible(true);
+
+		stateChanged(null);
 	}
 	
 	@Override
 	public void stateChanged(ChangeEvent e) {
+
+		ArrayList<Event> eventList = cal.getEvents(cal.getTime());
+
+		String eventStr = "Events:\n";
+
+		for(Event evt : eventList) {
+			eventStr += evt.toAltString() + "\n";
+		}
+
+		if(eventList.isEmpty()) {eventStr += "No events today";}
+
+		eventArea.setText(eventStr);
+
 		calPanel.draw();
 	}
 }

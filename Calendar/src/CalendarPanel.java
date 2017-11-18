@@ -4,6 +4,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 /**
@@ -23,6 +24,9 @@ public class CalendarPanel extends JPanel {
 	private final int DAY_SPACING = 10;
 	
 	private final int MONTH_LABEL_SIZE = 20;
+	private final int MONTH_LABEL_HEIGHT = 40;
+
+	private final int BUTTON_PANEL_HEIGHT = 30;
 	
 	private JPanel dayGridPanel;
 	private JLabel monthLabel;
@@ -31,21 +35,52 @@ public class CalendarPanel extends JPanel {
 
 		this.rc = new GregorianCalendar();
 		this.cal = cal;
-		
+
+		int calWidth = 7 * DAY_WIDTH + 6 * DAY_SPACING;
+		int calHeight = 6 * DAY_HEIGHT + 5 * DAY_SPACING + 10;
+		int totalHeight = calHeight + MONTH_LABEL_HEIGHT + BUTTON_PANEL_HEIGHT;
+
 		// Container panel
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+		this.setPreferredSize(new Dimension(calWidth, totalHeight));
+		this.setAlignmentX(RIGHT_ALIGNMENT);
 		
 		// Grid panel
+		JPanel dayGridWrapper = new JPanel();
+		dayGridWrapper.setPreferredSize(new Dimension(calWidth, calHeight));
+		dayGridWrapper.setBorder(BorderFactory.createLineBorder(Color.CYAN));
 		dayGridPanel = new JPanel();
 		dayGridPanel.setLayout(new GridLayout(0, 7, DAY_SPACING, DAY_SPACING));
-		
+		dayGridWrapper.add(dayGridPanel);
+
+		// Button panel
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
+		buttonPanel.setPreferredSize(new Dimension(calWidth, BUTTON_PANEL_HEIGHT));
+		buttonPanel.setMinimumSize(new Dimension(calWidth, BUTTON_PANEL_HEIGHT));
+		buttonPanel.setBorder(BorderFactory.createLineBorder(Color.red));
+
+		// Next button
+		JButton nextButton = new JButton("Next >>");
+		nextButton.addActionListener(e -> cal.next("m", "n"));
+
+		// Previous button
+		JButton previousButton = new JButton("<< Previous");
+		previousButton.addActionListener(e -> cal.next("m", "p"));
+
 		// Month label
 		monthLabel = new JLabel("", SwingConstants.LEFT);
 		monthLabel.setFont(new Font(monthLabel.getFont().getName(), Font.PLAIN, MONTH_LABEL_SIZE));
+		monthLabel.setPreferredSize(new Dimension(calWidth, MONTH_LABEL_HEIGHT));
+		monthLabel.setBorder(BorderFactory.createLineBorder(Color.blue));
 
 		// Add components
+		buttonPanel.add(previousButton);
+		buttonPanel.add(nextButton);
+
 		this.add(monthLabel);
-		this.add(dayGridPanel);
+		this.add(dayGridWrapper);
+		this.add(buttonPanel);
 		
 		this.draw();
 	}
@@ -63,7 +98,7 @@ public class CalendarPanel extends JPanel {
 		for(int i = 1; i < rc.get(GregorianCalendar.DAY_OF_WEEK); i++) {
 			//JLabel blank = new JLabel(" ");
 			//this.add(blank);
-			DayComponent blankDay = new DayComponent(0, DAY_WIDTH, DAY_HEIGHT);
+			DayComponent blankDay = new DayComponent(0, DAY_WIDTH, DAY_HEIGHT, false);
 			dayGridPanel.add(blankDay);
 		}
 
@@ -71,7 +106,9 @@ public class CalendarPanel extends JPanel {
 		
 		// Draw days on grid
 		for(int i = 1; i <= daysInMonth; i++) {
-			DayComponent day = new DayComponent(i, DAY_WIDTH, DAY_HEIGHT);
+			rc.set(GregorianCalendar.DAY_OF_MONTH, i);
+			boolean dayHasEvent = !(cal.getEvents(rc.getTime())).isEmpty();
+			DayComponent day = new DayComponent(i, DAY_WIDTH, DAY_HEIGHT, dayHasEvent);
 			dayGridPanel.add(day);
 
 			// Add click event to day
@@ -104,11 +141,13 @@ public class CalendarPanel extends JPanel {
 		
 		private int day;
 		private String drawDay;
+		private boolean hasEvent;
 
-		public DayComponent(int day, int width, int height) {
+		public DayComponent(int day, int width, int height, boolean hasEvent) {
 
 			this.day = day;
 			this.drawDay = (day > 0) ? Integer.toString(day) : "";
+			this.hasEvent = hasEvent;
 
 			this.setSize(width, height);
 			this.setPreferredSize(new Dimension(width, height));
@@ -122,6 +161,10 @@ public class CalendarPanel extends JPanel {
 
 				if(day == cal.get(GregorianCalendar.DAY_OF_MONTH)) {
 					g2d.setColor(Color.RED);
+				}
+
+				if(hasEvent) {
+					g2d.fillOval(this.getWidth() - 20, 10, 10, 10);
 				}
 
 				g2d.drawRect(0, 0, this.getWidth() - 1, this.getHeight() - 1);

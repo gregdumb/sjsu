@@ -84,6 +84,21 @@ public class Event implements Comparable<Event>
 		
 		return prettyDate + "\t\t" + title;
 	}
+
+	public String toAltString() {
+		String prettyStartTime = UI.timeFormat.format(startTime);
+		String prettyEndTime = UI.timeFormat.format(endTime);
+		String prettyTime = "";
+
+		if(prettyStartTime.equals(prettyEndTime)) {
+			prettyTime = prettyStartTime;
+		}
+		else {
+			prettyTime = prettyStartTime + "-" + prettyEndTime;
+		}
+
+		return title + "\t\t" + prettyTime;
+	}
 	
 	/**
 	 * Used for sorting
