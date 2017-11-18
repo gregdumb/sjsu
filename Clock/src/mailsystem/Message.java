@@ -6,7 +6,7 @@ package mailsystem;
 public class Message
 {
    /**
-      Construct a mailsystem.Message object.
+      Construct a mailsystem.mailsystem.Message object.
       @param messageText the message text
    */
    public Message(String messageText)

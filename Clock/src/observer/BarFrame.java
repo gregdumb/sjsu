@@ -5,7 +5,6 @@ import javax.swing.*;
 import javax.swing.event.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;

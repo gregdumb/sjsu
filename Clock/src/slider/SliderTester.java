@@ -4,11 +4,6 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import slider.ScalableShape;
-import slider.ShapeIcon;
-
-import java.awt.*;
-
 /**
  * Created by Greg on 10/28/2017.
  */
@@ -24,7 +19,7 @@ public class SliderTester
 		JSlider slider = new JSlider();
 		
 		final ScalableShape carShape = new CarShape(0, 0, 100);
-		//ShapeIcon car = new ShapeIcon(carShape, 200, 200);
+		//animation.slider.ShapeIcon car = new animation.slider.ShapeIcon(carShape, 200, 200);
 		final ShapeIcon carIcon = new ShapeIcon(carShape, 200, 200);
 		
 		label.setIcon(carIcon);

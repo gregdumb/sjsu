@@ -30,7 +30,7 @@ public class DataModel
 	}
 	
 	/**
-	 * Attach a listener to the Model
+	 * Attach a listener to the mvc.Model
 	 *
 	 * @param c the listener
 	 */

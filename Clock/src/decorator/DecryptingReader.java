@@ -1,6 +1,4 @@
-package decorator;
-
-/**
+package decorator; /**
  * Created by Greg on 10/29/2017.
  */
 import java.io.Reader;

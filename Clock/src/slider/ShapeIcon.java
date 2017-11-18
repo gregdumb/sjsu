@@ -1,7 +1,5 @@
 package slider;
 
-import slider.ScalableShape;
-
 import javax.swing.*;
 import java.awt.*;
 
@@ -11,7 +9,7 @@ import java.awt.*;
 */
 public class ShapeIcon implements Icon
 {
-   public ShapeIcon(slider.ScalableShape shape,
+   public ShapeIcon(ScalableShape shape,
 					int width, int height)
    {
       this.shape = shape;
