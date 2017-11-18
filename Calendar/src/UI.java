@@ -12,6 +12,7 @@ import java.util.Scanner;
 public class UI
 {
 	public static DateFormat eventDateFormat = new SimpleDateFormat("MM/dd/yyyy");
+	public static final DateFormat timeFormat = new SimpleDateFormat("k:mm");
 	
 	/**
 	 * Display output text with newline at end
