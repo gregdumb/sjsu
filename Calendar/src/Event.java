@@ -26,8 +26,14 @@ public class Event implements Comparable<Event>
 	{
 		date = d;
 		title = t.replace(EventCalendar.DIV, ""); // Remove div to avoid breaking file saving;
-		startTime = start;
-		endTime = end;
+		try {
+			startTime = UI.timeFormat.parse(UI.timeFormat.format(start));
+			endTime = UI.timeFormat.parse(UI.timeFormat.format(end));
+		}
+		catch (Exception e) {
+			startTime = new Date();
+			endTime = new Date();
+		}
 	}
 
 	/**
@@ -65,6 +71,8 @@ public class Event implements Comparable<Event>
 
 		if(df.format(e.date).equals(df.format(date)))
 		{
+			if(e.startTime.equals(startTime) || e.endTime.equals(endTime))
+				return true;
 			if(e.startTime.after(startTime) && e.startTime.before(endTime))
 				return true;
 			if(e.endTime.after(startTime) && e.endTime.before(endTime))

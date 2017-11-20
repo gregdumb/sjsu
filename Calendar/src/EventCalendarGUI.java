@@ -26,6 +26,7 @@ public class EventCalendarGUI implements ChangeListener {
 	private final JPanel panel;
 	private final CalendarPanel calPanel;
 	private final JTextArea eventArea;
+	private final EventPanel eventPanel;
 
 	// GUI properties
 	private final String FRAME_TITLE = "Gregle Calendar";
@@ -51,22 +52,17 @@ public class EventCalendarGUI implements ChangeListener {
 		// Calendar
 		calPanel = new CalendarPanel(cal);
 
-		JButton previousButton = new JButton("Previous");
-		previousButton.addActionListener(e -> cal.next("m", "p"));
-		
-		// Next button
-		JButton nextButton = new JButton("Next");
-		nextButton.addActionListener(e -> cal.next("m", "n"));
-
 		// Event display
 		eventArea = new JTextArea("Helloo");
 		eventArea.setPreferredSize(new Dimension(300, 300));
 		eventArea.setEditable(false);
+		
+		// Event panel
+		eventPanel = new EventPanel(cal);
 
-		panel.add(previousButton);
 		panel.add(calPanel);
-		panel.add(nextButton);
-		panel.add(eventArea);
+		//panel.add(eventArea);
+		panel.add(eventPanel);
 		frame.add(panel);
 
 		frame.pack();
@@ -87,9 +83,9 @@ public class EventCalendarGUI implements ChangeListener {
 		}
 
 		if(eventList.isEmpty()) {eventStr += "No events today";}
-
 		eventArea.setText(eventStr);
-
+		
 		calPanel.draw();
+		eventPanel.update();
 	}
 }
