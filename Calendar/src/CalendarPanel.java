@@ -4,11 +4,11 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.GregorianCalendar;
 
 /**
- * Created by Greg on 11/9/2017.
+ * CalendarPanel
+ * Custom JPanel that shows a month calendar view with forward/back buttons
  */
 public class CalendarPanel extends JPanel {
 	
@@ -16,7 +16,9 @@ public class CalendarPanel extends JPanel {
 	public static final DateFormat monthDateFormat = new SimpleDateFormat("MMMMM yyyy");
 	
 	private GregorianCalendar rc;
-	private EventCalendar cal;
+	private EventCalendar cal; // Reference to the model
+	
+	private GregorianCalendar TODAY = new GregorianCalendar();
 
 	// UI Properties
 	private final int DAY_WIDTH = 60;
@@ -48,7 +50,6 @@ public class CalendarPanel extends JPanel {
 		// Grid panel
 		JPanel dayGridWrapper = new JPanel();
 		dayGridWrapper.setPreferredSize(new Dimension(calWidth, calHeight));
-		dayGridWrapper.setBorder(BorderFactory.createLineBorder(Color.CYAN));
 		dayGridPanel = new JPanel();
 		dayGridPanel.setLayout(new GridLayout(0, 7, DAY_SPACING, DAY_SPACING));
 		dayGridWrapper.add(dayGridPanel);
@@ -58,7 +59,6 @@ public class CalendarPanel extends JPanel {
 		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.X_AXIS));
 		buttonPanel.setPreferredSize(new Dimension(calWidth, BUTTON_PANEL_HEIGHT));
 		buttonPanel.setMinimumSize(new Dimension(calWidth, BUTTON_PANEL_HEIGHT));
-		buttonPanel.setBorder(BorderFactory.createLineBorder(Color.red));
 
 		// Next button
 		JButton nextButton = new JButton("Next >>");
@@ -72,7 +72,6 @@ public class CalendarPanel extends JPanel {
 		monthLabel = new JLabel("", SwingConstants.LEFT);
 		monthLabel.setFont(new Font(monthLabel.getFont().getName(), Font.PLAIN, MONTH_LABEL_SIZE));
 		monthLabel.setPreferredSize(new Dimension(calWidth, MONTH_LABEL_HEIGHT));
-		monthLabel.setBorder(BorderFactory.createLineBorder(Color.blue));
 
 		// Add components
 		buttonPanel.add(previousButton);
@@ -161,6 +160,12 @@ public class CalendarPanel extends JPanel {
 
 				if(day == cal.get(GregorianCalendar.DAY_OF_MONTH)) {
 					g2d.setColor(Color.RED);
+				}
+				
+				if(day == TODAY.get(GregorianCalendar.DAY_OF_MONTH) &&
+						cal.get(GregorianCalendar.MONTH) == TODAY.get(GregorianCalendar.MONTH) &&
+						cal.get(GregorianCalendar.YEAR) == TODAY.get(GregorianCalendar.YEAR)) {
+					g2d.drawString("Today", 10, 40);
 				}
 
 				if(hasEvent) {

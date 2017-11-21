@@ -1,19 +1,12 @@
 /**
- * Homework #1: Calendar
+ * Homework #4: GUI Calendar
  * Just instantiates and runs the calendar
  * @author Greg Brisebois
  * @version 1.0
  */
-public class Main
+public class SimpleCalendar
 {
 	public static void main(String[] args) {
-		
-		//EventCalendarCLUI myCal = new EventCalendarCLUI();
-		//myCal.run();
-
-		EventCalendar myCal = new EventCalendar();
 		EventCalendarGUI myCalGUI = new EventCalendarGUI();
-		
-		//myCal.attach(myCalGUI);
 	}
 }

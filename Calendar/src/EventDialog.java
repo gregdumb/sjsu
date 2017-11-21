@@ -10,7 +10,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
- * Created by Greg on 11/19/2017.
+ * EventDialog
+ * Pops up a dialog for the user to enter a new event for the calendar
  */
 public class EventDialog extends JDialog
 {

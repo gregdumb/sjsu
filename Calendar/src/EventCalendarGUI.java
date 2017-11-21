@@ -2,20 +2,19 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
 /**
- * Created by Greg on 11/9/2017.
+ * Homework #4
+ * EventCalendarGUI
+ * A GUI for the EventCalendar from the first homework assignment
  */
 public class EventCalendarGUI implements ChangeListener {
 	
-	
-	// Event calendar
+	// Event calendar, the "model" of the program
 	private final EventCalendar cal;
 
 	// Render calendar
@@ -45,6 +44,7 @@ public class EventCalendarGUI implements ChangeListener {
 		frame = new JFrame();
 		frame.setTitle(FRAME_TITLE);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setResizable(false);
 
 		// Layout panel
 		panel = new JPanel();
@@ -61,12 +61,23 @@ public class EventCalendarGUI implements ChangeListener {
 		eventPanel = new EventPanel(cal);
 
 		panel.add(calPanel);
-		//panel.add(eventArea);
 		panel.add(eventPanel);
 		frame.add(panel);
 
 		frame.pack();
 		frame.setVisible(true);
+		
+		// Save events on close
+		frame.addWindowListener(new WindowAdapter()
+		{
+			@Override
+			public void windowClosing(WindowEvent e)
+			{
+				super.windowClosing(e);
+				
+				cal.exportEvents();
+			}
+		});
 
 		stateChanged(null);
 	}

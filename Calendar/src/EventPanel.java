@@ -5,7 +5,8 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 /**
- * Created by Greg on 11/18/2017.
+ * EventPanel
+ * Custom JPanel that shows a list of events on the current day, with buttons to add an event
  */
 public class EventPanel extends JPanel
 {
@@ -18,6 +19,7 @@ public class EventPanel extends JPanel
 	
 	// UI stats
 	private final int WIDTH = 300;
+	private final int HEIGHT = 400;
 	
 	
 	public EventPanel(EventCalendar cal) {
@@ -25,7 +27,7 @@ public class EventPanel extends JPanel
 		this.cal = cal;
 		
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-		this.setPreferredSize(new Dimension(WIDTH, WIDTH));
+		this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
 		
 		// Event text
 		eventTextArea = new JTextArea();
@@ -40,20 +42,33 @@ public class EventPanel extends JPanel
 		newEventButton.addActionListener(new ActionListener(){
 			
 			@Override
-			public void actionPerformed(ActionEvent e)
-			{
+			public void actionPerformed(ActionEvent e) {
 				eventDialog.setVisible(true);
 			}
 		});
 		
-		this.add(eventTextArea);
-		this.add(newEventButton);
+		// Close button
+		JButton closeButton = new JButton("Close");
+		closeButton.addActionListener(e -> {
+			cal.exportEvents();
+			
+			System.exit(0);
+		});
 		
-		this.setBorder(BorderFactory.createLineBorder(Color.green));
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.LINE_AXIS));
+		
+		this.add(eventTextArea);
+		buttonPanel.add(newEventButton);
+		buttonPanel.add(closeButton);
+		this.add(buttonPanel);
 		
 		this.update();
 	}
 	
+	/**
+	 * Updates the view in case the model changed
+	 */
 	public void update() {
 		
 		ArrayList<Event> eventList = cal.getEvents(cal.getTime());

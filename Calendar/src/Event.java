@@ -92,7 +92,11 @@ public class Event implements Comparable<Event>
 		
 		return prettyDate + "\t\t" + title;
 	}
-
+	
+	/**
+	 * Convert event to a different format of string
+	 * @return string of event title & time
+	 */
 	public String toAltString() {
 		String prettyStartTime = UI.timeFormat.format(startTime);
 		String prettyEndTime = UI.timeFormat.format(endTime);
