@@ -1,4 +1,3 @@
-# sjsu
-School projects
+# SJSU CS151 Object-Oriented Programming
 
-Edited on local machine!
+Coursework for Prof. Suneuy Kim, Fall 2017
